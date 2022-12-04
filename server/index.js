@@ -41,6 +41,22 @@ app.post("/reviews", async(req, res) => {
     }
 })
 
+// create a reservation
+
+app.post("/reservations", async(req, res) => {
+    try {
+        //console.log(req.body);
+        const { size } = req.body;
+        const newReservation = await pool.query("INSERT INTO reservations (res_size) VALUES($1)",
+            [size]
+        );
+
+        res.json(newReservation.rows[0]);
+    } catch (err) {
+        console.error(err.message);
+    }
+})
+
 // get all resturants
 
 app.get("/restaurants", async (req, res) => {
@@ -119,6 +135,20 @@ app.delete("/reviews/:id", async (req, res) => {
         const deleteReview = await pool.query("DELETE FROM reviews WHERE rev_id = $1", [id]);
 
         res.json("Review was deleted!")
+    } catch (err) {
+        console.error(err.message);
+    }
+})
+
+// delete a reservation
+
+app.delete("/reservations/:id", async (req, res) => {
+    try {
+        //console.log(req.params)
+        const { id } = req.params;
+        const deleteReview = await pool.query("DELETE FROM reservations WHERE res_id = $1", [id]);
+
+        res.json("Reservation was deleted!")
     } catch (err) {
         console.error(err.message);
     }
