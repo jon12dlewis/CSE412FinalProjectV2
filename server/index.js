@@ -15,7 +15,7 @@ app.post("/restaurants", async(req, res) => {
     try {
         //console.log(req.body);
         const { description } = req.body;
-        const newRestuant = await pool.query("INSERT INTO restaurants (description) VALUES($1)",
+        const newRestuant = await pool.query("INSERT INTO restaurants (r_description) VALUES($1)",
             [description]
         );
 
@@ -86,7 +86,7 @@ app.put("/restaurants/:id", async (req, res) => {
     try {
         const { id } = req.params;
         const { description } = req.body;
-        const updateResturant = await pool.query("UPDATE restaurants SET description = $1 WHERE r_id = $2",
+        const updateResturant = await pool.query("UPDATE restaurants SET r_description = $1 WHERE r_id = $2",
             [description, id]);
 
         res.json("Restruant was updated");
