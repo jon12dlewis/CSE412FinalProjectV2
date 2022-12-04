@@ -11,11 +11,11 @@ app.use(express.json());
 
 // create a resturant
 
-app.post("/resturants", async(req, res) => {
+app.post("/restaurants", async(req, res) => {
     try {
         //console.log(req.body);
         const { description } = req.body;
-        const newRestuant = await pool.query("INSERT INTO resturants (description) VALUES($1)",
+        const newRestuant = await pool.query("INSERT INTO restaurants (description) VALUES($1)",
             [description]
         );
 
@@ -25,11 +25,27 @@ app.post("/resturants", async(req, res) => {
     }
 })
 
+// create a review
+
+app.post("/reviews", async(req, res) => {
+    try {
+        //console.log(req.body);
+        const { text } = req.body;
+        const newReview = await pool.query("INSERT INTO resturants (rev_text) VALUES($1)",
+            [text]
+        );
+
+        res.json(newReview.rows[0]);
+    } catch (err) {
+        console.error(err.message);
+    }
+})
+
 // get all resturants
 
-app.get("/resturants", async (req, res) => {
+app.get("/restaurants", async (req, res) => {
     try {
-        const allResturants = await pool.query("SELECT * FROM resturants");
+        const allResturants = await pool.query("SELECT * FROM restaurants");
         res.json(allResturants.rows);
     } catch (err) {
         console.error(err.message);
@@ -38,11 +54,11 @@ app.get("/resturants", async (req, res) => {
 
 // get a resturant
 
-app.get("/resturants/:id", async (req, res) => {
+app.get("/restaurants/:id", async (req, res) => {
     try {
         //console.log(req.params)
         const { id } = req.params;
-        const resturant = await pool.query("SELECT * FROM resturants WHERE r_id = $1", [id]);
+        const resturant = await pool.query("SELECT * FROM restaurants WHERE r_id = $1", [id]);
 
         res.json(resturant.rows[0])
     } catch (err) {
@@ -50,13 +66,27 @@ app.get("/resturants/:id", async (req, res) => {
     }
 })
 
+// get all reviews for restaurant
+
+app.get("/reviews/:id", async (req, res) => {
+    try {
+        //console.log(req.params)
+        const { id } = req.params;
+        const reviews = await pool.query("SELECT * FROM reviews WHERE r_id = $1", [id]);
+
+        res.json(reviews.rows[0])
+    } catch (err) {
+        console.error(err.message);
+    }
+})
+
 // update a resturant
 
-app.put("/resturants/:id", async (req, res) => {
+app.put("/restaurants/:id", async (req, res) => {
     try {
         const { id } = req.params;
         const { description } = req.body;
-        const updateResturant = await pool.query("UPDATE resturants SET description = $1 WHERE r_id = $2",
+        const updateResturant = await pool.query("UPDATE restaurants SET description = $1 WHERE r_id = $2",
             [description, id]);
 
         res.json("Restruant was updated");
@@ -68,13 +98,27 @@ app.put("/resturants/:id", async (req, res) => {
 
 // delete a resturant
 
-app.delete("/resturants/:id", async (req, res) => {
+app.delete("/restaurants/:id", async (req, res) => {
     try {
         //console.log(req.params)
         const { id } = req.params;
-        const deleteResturant = await pool.query("DELETE FROM resturants WHERE r_id = $1", [id]);
+        const deleteResturant = await pool.query("DELETE FROM restaurants WHERE r_id = $1", [id]);
 
         res.json("Resturant was deleted!")
+    } catch (err) {
+        console.error(err.message);
+    }
+})
+
+// delete a review
+
+app.delete("/reviews/:id", async (req, res) => {
+    try {
+        //console.log(req.params)
+        const { id } = req.params;
+        const deleteReview = await pool.query("DELETE FROM reviews WHERE rev_id = $1", [id]);
+
+        res.json("Review was deleted!")
     } catch (err) {
         console.error(err.message);
     }
