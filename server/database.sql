@@ -2,7 +2,11 @@ CREATE DATABASE notYelp;
 
 CREATE TABLE resturants(
 	r_id SERIAL PRIMARY KEY,
-	description VARCHAR(255)
+	r_name VARCHAR(255),
+	r_address VARCHAR(255),
+	r_description VARCHAR(255),
+	r_phone VARCHAR(255),
+	r_rating int
 );
 
 CREATE TABLE reviews(
